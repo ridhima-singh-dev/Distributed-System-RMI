@@ -1,0 +1,39 @@
+package broker;
+
+public class BrokerUnitTest {
+	private static Registry registry;
+	private static LocalBrokerService localBrokerService;
+	private static BrokerService brokerService;
+
+	@BeforeClass
+	public static void setup() {
+		localBrokerService = new LocalBrokerService();
+		try {
+			registry = LocateRegistry.createRegistry(1099);
+			// To Register a registry
+			LocalBrokerService.registry = registry;
+			brokerService = (BrokerService) UnicastRemoteObject.exportObject(localBrokerService, 0);
+			registry.bind(Constants.BROKER_SERVICE, brokerService);
+		} catch (Exception e) {
+			System.out.println("Trouble: " + e);
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void connectionTest() throws Exception {
+		BrokerService service = (BrokerService) registry.lookup(Constants.BROKER_SERVICE);
+		assertNotNull(service);
+	}
+
+	@Test
+	public void testGenerateListOfQuotation() throws Exception {
+	    BrokerService service = (BrokerService) registry.lookup(Constants.BROKER_SERVICE);
+	    
+	    // Check if the result is an instance of List
+	    assertTrue(service.getQuotations(new ClientInfo("Donald Trump", ClientInfo.MALE, 44, 6.0, 75.0, false, false)) instanceof List);
+	    
+	    // Check if the list is empty
+	    assertTrue(service.getQuotations(new ClientInfo("Joe Biden", ClientInfo.MALE, 44, 6.0, 75.0, false, false)).isEmpty());
+	}
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.rmi.registry.Registry"/>
+    <fullyQualifiedTypeName name="java.rmi.registry.LocateRegistry"/>
+    <fullyQualifiedTypeName name="service.core.QuotationService"/>
+    <fullyQualifiedTypeName name="service.auldfellas.AFQService"/>
+    <fullyQualifiedTypeName name="service.core.Constants"/>
+    <fullyQualifiedTypeName name="service.core.ClientInfo"/>
+    <fullyQualifiedTypeName name="java.util.stream.Stream"/>
+    <fullyQualifiedTypeName name="service.core.Quotation"/>
+    <fullyQualifiedTypeName name="java.util.Collection"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="service.core.BrokerService"/>
+    <fullyQualifiedTypeName name="service.broker.LocalBrokerService"/>
+</qualifiedTypeNameHistroy>

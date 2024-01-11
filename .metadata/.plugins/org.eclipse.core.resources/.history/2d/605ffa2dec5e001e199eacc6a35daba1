@@ -1,0 +1,71 @@
+package broker;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import service.broker.LocalBrokerService;
+import service.core.BrokerService;
+import service.core.ClientInfo;
+import service.core.Constants;
+import service.core.Quotation;
+
+public class BrokerUnitTest {
+	private static Registry registry;
+	private static LocalBrokerService localBrokerService;
+	private static BrokerService brokerService;
+	private ClientInfo clientInfo;
+	private boolean expectedResult;
+
+	@BeforeClass
+	public static void setup() {
+		localBrokerService = new LocalBrokerService();
+		try {
+			registry = LocateRegistry.createRegistry(1099);
+			// To Register a registry
+			LocalBrokerService.registry = registry;
+			brokerService = (BrokerService) UnicastRemoteObject.exportObject(localBrokerService, 0);
+			registry.bind(Constants.BROKER_SERVICE, brokerService);
+		} catch (Exception e) {
+			System.out.println("Trouble: " + e);
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void connectionTest() throws Exception {
+		BrokerService service = (BrokerService) registry.lookup(Constants.BROKER_SERVICE);
+		assertNotNull(service);
+	}
+
+	@Test
+	public void testGenerateListOfQuotation() throws Exception {
+	    // broker service for the RMI registry
+	    BrokerService service = (BrokerService) registry.lookup(Constants.BROKER_SERVICE);
+	    
+	    //using a different client name for testing which have associated quotations.
+	    ClientInfo donaldDuck = new ClientInfo("Donald Duck", ClientInfo.MALE, 35, 0.45, 1.6, false, false);
+	    ClientInfo joeBiden = new ClientInfo("Joe Biden", ClientInfo.MALE, 44, 6.0, 75.0, false, false);
+
+	    // Expected quotations for Donald Duck to be in a List
+	    assertTrue("Donald Duck", service.getQuotations(donaldDuck) instanceof List);
+	 
+	    //Expected an empty list of quotations for Joe Biden
+	    List<Quotation> quotationsForJoeBiden = service.getQuotations(joeBiden);
+	    assertTrue("Joe Biden", quotationsForJoeBiden.isEmpty());
+	    
+	}
+
+	
+}
